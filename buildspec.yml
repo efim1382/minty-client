@@ -9,6 +9,7 @@ phases:
         commands:
             - echo "Building..."
             - npm run build
+            - cp package.json dist/
 
 artifacts:
     base-directory: 'dist'
