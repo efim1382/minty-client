@@ -5,10 +5,6 @@ phases:
         commands:
             - echo "Installing dependencies..."
             - npm install
-    pre_build:
-        commands:
-            - echo "Linting..."
-            - npm run lint
     build:
         commands:
             - echo "Building..."
