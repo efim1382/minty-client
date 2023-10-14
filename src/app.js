@@ -2,7 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import router from "./router";
-import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
+import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import { light } from "styles/themes";
 
 const container = document.getElementById("app");
@@ -13,5 +13,5 @@ root.render(
 		<StyledEngineProvider injectFirst>
 			<RouterProvider router={router} />
 		</StyledEngineProvider>
-	</ThemeProvider>
+	</ThemeProvider>,
 );
