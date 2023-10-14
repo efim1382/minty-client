@@ -1,4 +1,4 @@
 environment:
     platform:
         name: Node.js
-        version: 18.17.0
+        version: 18.12.1

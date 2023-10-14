@@ -11,6 +11,10 @@
 		"dev": "webpack serve --mode development",
 		"lint": "eslint ./src --ext .js,.jsx"
 	},
+	"engines": {
+		"node": "18.12.1",
+		"npm": "8.19.2"
+	},
 	"browserslist": [
 		"> 0.5%",
 		"IE 11"
