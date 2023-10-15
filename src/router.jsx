@@ -59,4 +59,8 @@ export default createBrowserRouter(
 	createRoutesFromElements(
 		router,
 	),
+
+	{
+		basename: "/",
+	},
 );
