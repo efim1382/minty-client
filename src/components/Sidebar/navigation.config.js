@@ -1,8 +1,9 @@
-import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
-import CasesOutlinedIcon from '@mui/icons-material/CasesOutlined';
-import PhoneInTalkOutlinedIcon from '@mui/icons-material/PhoneInTalkOutlined';
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-import PrivacyTipOutlinedIcon from '@mui/icons-material/PrivacyTipOutlined';
+import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
+import CasesOutlinedIcon from "@mui/icons-material/CasesOutlined";
+import PhoneInTalkOutlinedIcon from "@mui/icons-material/PhoneInTalkOutlined";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import PrivacyTipOutlinedIcon from "@mui/icons-material/PrivacyTipOutlined";
+import LocalAtmOutlinedIcon from "@mui/icons-material/LocalAtmOutlined";
 
 export default [
 	{
@@ -20,7 +21,13 @@ export default [
 				href: "/portfolios/",
 				Icon: CasesOutlinedIcon,
 			},
-		]
+
+			{
+				name: "My Funds",
+				href: "/funds/",
+				Icon: LocalAtmOutlinedIcon,
+			},
+		],
 	},
 
 	{
@@ -45,6 +52,6 @@ export default [
 				href: "/privacy/",
 				Icon: PrivacyTipOutlinedIcon,
 			},
-		]
-	}
+		],
+	},
 ];

@@ -17,8 +17,9 @@ import ForgotPassword from "pages/Auth/ForgotPassword";
 import ResetPassword from "pages/Auth/ResetPassword";
 
 import Dashboard from "pages/Dashboard";
-import Analytics from "pages/Analytics";
 import Portfolios from "pages/Portfolios";
+import Funds from "pages/Funds";
+import Analytics from "pages/Analytics";
 import PortfolioDetails from "pages/Portfolios/Details";
 import RealEstate from "pages/RealEstate";
 import Deals from "pages/Deals";
@@ -36,6 +37,7 @@ const router = (
 			<Route path="/analytics/" element={<Analytics />} />
 			<Route path="/portfolios/" element={<Portfolios />} />
 			<Route path="/portfolios/:portfolioId/" element={<PortfolioDetails />} />
+			<Route path="/funds/" element={<Funds />} />
 			<Route path="/real-estate/" element={<RealEstate />} />
 			<Route path="/deals/" element={<Deals />} />
 			<Route path="/contact/" element={<Contact />} />

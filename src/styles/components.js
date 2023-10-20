@@ -132,6 +132,14 @@ export default {
 		},
 	},
 
+	MuiCard: {
+		styleOverrides: {
+			root: {
+				boxShadow: "none",
+			},
+		},
+	},
+
 	MuiCardHeader: {
 		styleOverrides: {
 			root: {

@@ -4,7 +4,7 @@ export default {
 			id: "basic-bar",
 
 			toolbar: {
-				show: false
+				show: false,
 			},
 
 			animations: {
@@ -21,12 +21,12 @@ export default {
 		},
 
 		dataLabels: {
-			enabled: false
+			enabled: false,
 		},
 
 		stroke: {
 			show: true,
-			colors: ['#4527a0'],
+			colors: ["#4527a0"],
 			width: 1,
 		},
 
@@ -34,7 +34,7 @@ export default {
 			type: "gradient",
 
 			gradient: {
-				type: 'vertical',
+				type: "vertical",
 				shadeIntensity: 1,
 				opacityFrom: 1,
 				opacityTo: 1,
@@ -43,13 +43,13 @@ export default {
 				colorStops: [
 					{
 						offset: 0,
-						color: '#a897d3',
+						color: "#a897d3",
 						opacity: 1,
 					},
 
 					{
 						offset: 100,
-						color: '#dad1ec',
+						color: "#dad1ec",
 						opacity: 1,
 					},
 				],
@@ -73,14 +73,14 @@ export default {
 		grid: {
 			xaxis: {
 				lines: {
-					show: false
-				}
+					show: false,
+				},
 			},
 
 			yaxis: {
 				lines: {
-					show: false
-				}
+					show: false,
+				},
 			},
 		},
 	},
@@ -88,7 +88,7 @@ export default {
 	series: [
 		{
 			name: "series-1",
-			data: [30, 40, 45, 50, 49, 60, 70, 91]
-		}
-	]
+			data: [30, 40, 45, 50, 49, 60, 70, 91],
+		},
+	],
 };

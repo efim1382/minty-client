@@ -58,4 +58,10 @@ export default {
 		color: "#697586",
 		letterSpacing: "initial",
 	},
+
+	overline: {
+		fontSize: "0.75rem",
+		fontWeight: 500,
+		color: "#697586",
+	},
 };
