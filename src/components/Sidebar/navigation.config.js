@@ -4,6 +4,7 @@ import PhoneInTalkOutlinedIcon from "@mui/icons-material/PhoneInTalkOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import PrivacyTipOutlinedIcon from "@mui/icons-material/PrivacyTipOutlined";
 import LocalAtmOutlinedIcon from "@mui/icons-material/LocalAtmOutlined";
+import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
 
 export default [
 	{
@@ -26,6 +27,12 @@ export default [
 				name: "My Funds",
 				href: "/funds/",
 				Icon: LocalAtmOutlinedIcon,
+			},
+
+			{
+				name: "Investment Planner",
+				href: "/planner/",
+				Icon: TrendingUpOutlinedIcon,
 			},
 		],
 	},

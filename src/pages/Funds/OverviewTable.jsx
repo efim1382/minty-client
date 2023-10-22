@@ -1,142 +1,121 @@
 import React from "react";
-import Paper from "@mui/material/Paper";
-import CardHeader from "@mui/material/CardHeader";
-import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
-import TableContainer from "@mui/material/TableContainer";
 import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import FundsList from "./FundsList";
+
+const monobankRows = [
+	{
+		icon: "₴",
+		cardType: "Black Card",
+		amount: "32,233.55",
+	},
+
+	{
+		icon: "₴",
+		cardType: "White Card",
+		amount: "10,211.22",
+	},
+
+	{
+		icon: "$",
+		cardType: "Currency Card",
+		amount: "259.55",
+	},
+
+	{
+		icon: "€",
+		cardType: "Currency Card",
+		amount: "944.00",
+	},
+
+	{
+		icon: "$",
+		cardType: "Vacation Jar",
+		amount: "944.00",
+	},
+];
+
+const abankRows = [
+	{
+		icon: "₴",
+		cardType: "Green Card",
+		amount: "32,233.55",
+	},
+
+	{
+		icon: "$",
+		cardType: "Currency Card",
+		amount: "259.55",
+	},
+
+	{
+		icon: "€",
+		cardType: "Currency Card",
+		amount: "944.00",
+	},
+];
+
+const cashRows = [
+	{
+		icon: "₴",
+		cardType: "UAH",
+		amount: "32,233.55",
+	},
+
+	{
+		icon: "$",
+		cardType: "USD",
+		amount: "259.55",
+	},
+
+	{
+		icon: "€",
+		cardType: "UUR",
+		amount: "944.00",
+	},
+];
+
+const tetherRows = [
+	{
+		icon: "$",
+		cardType: "Binance",
+		amount: "542.55",
+	},
+];
 
 const OverviewTable = () => {
 	return (
 		<Grid container spacing={2}>
 			<Grid item xs={6}>
-				<TableContainer
-					component={Paper}
-					elevation={0}
-				>
-					<CardHeader
+				<Stack spacing={2}>
+					<FundsList
 						title="Monobank"
+						rows={monobankRows}
+						total="$12,333.44"
 					/>
 
-					<Table>
-						<TableBody>
-							<TableRow>
-								<TableCell>Black</TableCell>
-								<TableCell>UAH</TableCell>
-								<TableCell>23,500</TableCell>
-							</TableRow>
-
-							<TableRow>
-								<TableCell>White</TableCell>
-								<TableCell>UAH</TableCell>
-								<TableCell>10,000</TableCell>
-							</TableRow>
-
-							<TableRow>
-								<TableCell>Currency Card</TableCell>
-								<TableCell>USD</TableCell>
-								<TableCell>24</TableCell>
-							</TableRow>
-
-							<TableRow>
-								<TableCell>Currency Card</TableCell>
-								<TableCell>EUR</TableCell>
-								<TableCell>100</TableCell>
-							</TableRow>
-
-							<TableRow>
-								<TableCell>Wishes Savings</TableCell>
-								<TableCell>USD</TableCell>
-								<TableCell>800</TableCell>
-							</TableRow>
-						</TableBody>
-					</Table>
-				</TableContainer>
-
-				<TableContainer
-					component={Paper}
-					elevation={0}
-					sx={{ mt: 2 }}
-				>
-					<CardHeader
+					<FundsList
 						title="A-Bank"
+						rows={abankRows}
+						total="$1,333.44"
 					/>
-
-					<Table>
-						<TableBody>
-							<TableRow>
-								<TableCell>Green Virtual</TableCell>
-								<TableCell>UAH</TableCell>
-								<TableCell>0</TableCell>
-							</TableRow>
-
-							<TableRow>
-								<TableCell>Currency Card</TableCell>
-								<TableCell>EUR</TableCell>
-								<TableCell>24</TableCell>
-							</TableRow>
-
-							<TableRow>
-								<TableCell>Currency Card</TableCell>
-								<TableCell>USD</TableCell>
-								<TableCell>245</TableCell>
-							</TableRow>
-						</TableBody>
-					</Table>
-				</TableContainer>
+				</Stack>
 			</Grid>
 
 			<Grid item xs={6}>
-				<TableContainer
-					component={Paper}
-					elevation={0}
-				>
-					<CardHeader
+				<Stack spacing={2}>
+					<FundsList
 						title="Cash"
+						rows={cashRows}
+						total="$2,333.44"
 					/>
 
-					<Table>
-						<TableBody>
-							<TableRow>
-								<TableCell>USD</TableCell>
-								<TableCell>8,500</TableCell>
-							</TableRow>
-
-							<TableRow>
-								<TableCell>EUR</TableCell>
-								<TableCell>800</TableCell>
-							</TableRow>
-
-							<TableRow>
-								<TableCell>LEV</TableCell>
-								<TableCell>1,500</TableCell>
-							</TableRow>
-						</TableBody>
-					</Table>
-				</TableContainer>
-
-				<TableContainer
-					component={Paper}
-					elevation={0}
-					sx={{ mt: 2 }}
-				>
-					<CardHeader
-						title="Crypto"
+					<FundsList
+						title="Tether"
+						rows={tetherRows}
+						total="$533.44"
 					/>
-
-					<Table>
-						<TableBody>
-							<TableRow>
-								<TableCell>Binance</TableCell>
-								<TableCell>USDT</TableCell>
-								<TableCell>550</TableCell>
-							</TableRow>
-						</TableBody>
-					</Table>
-				</TableContainer>
+				</Stack>
 			</Grid>
 		</Grid>
 	);

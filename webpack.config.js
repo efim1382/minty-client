@@ -49,6 +49,12 @@ module.exports = {
 				test: /\.css$/,
 				use: ["style-loader", "css-loader"],
 			},
+
+			// unused now (importing icons as react component)
+			{
+				test: /\.svg$/,
+				use: ["@svgr/webpack"],
+			},
 		],
 	},
 
