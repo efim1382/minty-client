@@ -18,103 +18,107 @@ const formatDate = (month, year) => {
 	return `${String(month).padStart(2, "0")}/${year}`;
 };
 
-const generateYearlyData = (initialData, startMonth, startYear) => {
-	const monthlyData = [];
+const calculate = (amount) => parseFloat(amount.toFixed(2));
 
-	const currentIncome = initialData.income;
-	const currentExpenses = initialData.expenses;
-	let emergencyFund = initialData.emergencyStart;
-	let investmentCapital = initialData.investmentStart;
+const generateItems = (config) => {
+	const items = [];
 
-	for (let month = startMonth; month < startMonth + 12; month++) {
-		const currentMonth = month <= 12 ? month : month - 12;
-		const currentYear = month <= 12 ? startYear : startYear + 1;
+	let currentMonth = config.month;
+	let currentYear = config.year;
 
-		const emergencyMonthlyPercent = initialData.growth.emergency / 12 / 100;
-		const investmentMonthlyPercent = initialData.growth.investment / 12 / 100;
+	let currentIncome = config.income;
+	let currentExpenses = config.expenses;
 
-		const freeFunds = currentIncome - currentExpenses;
+	let currentEmergency = config.emergency;
+	let currentInvestment = config.investment;
 
-		// Calculate growths
-		const emergencyGrowth = emergencyFund * emergencyMonthlyPercent;
-		const investmentGrowth = investmentCapital * investmentMonthlyPercent;
+	for (let monthIteration = 0; monthIteration < (12 * config.years); monthIteration++) {
+		const freeFunds = calculate(currentIncome - currentExpenses);
+		const emergencyMonthlyIncome = calculate(((config.growth.emergency * currentEmergency) / 100) / 12);
+		const investmentMonthlyIncome = calculate(((config.growth.investment * currentInvestment) / 100) / 12);
+		const total = calculate(currentEmergency + currentInvestment);
 
-		monthlyData.push({
-			date: formatDate(currentMonth, currentYear),
-			income: formatMoney(currentIncome),
-			expenses: formatMoney(currentExpenses),
-			freeFunds: formatMoney(freeFunds),
-			emergencyFund: {
-				current: formatMoney(emergencyFund),
-				growth: formatMoney(emergencyGrowth),
+		items.push({
+			month: currentMonth,
+			year: currentYear,
+			income: currentIncome,
+			expenses: currentExpenses,
+			freeFunds: freeFunds,
+
+			emergency: {
+				current: currentEmergency,
+				growth: emergencyMonthlyIncome,
 			},
-			investmentCapital: {
-				current: formatMoney(investmentCapital),
-				growth: formatMoney(investmentGrowth),
+
+			investment: {
+				current: currentInvestment,
+				growth: investmentMonthlyIncome,
 			},
-			total: formatMoney(emergencyFund + investmentCapital),
+
+			total,
 		});
 
-		// Distribute free funds
-		if (emergencyFund < initialData.emergencySize * currentExpenses) {
-			emergencyFund += freeFunds * (initialData.freeDistribution.emergency / 100);
-			investmentCapital += freeFunds * (initialData.freeDistribution.investment / 100);
-		} else {
-			investmentCapital += freeFunds;
+		// annual increase in investment
+		currentInvestment += investmentMonthlyIncome;
+
+		const investmentPercent = currentExpenses * config.emergencySize
+			? config.freeDistribution.investment
+			: 100;
+
+		currentInvestment += (investmentPercent * freeFunds) / 100;
+		currentInvestment = calculate(currentInvestment);
+
+		// annual increase in emergency fund
+		currentEmergency += emergencyMonthlyIncome;
+
+		if (currentEmergency < currentExpenses * config.emergencySize) {
+			currentEmergency += (config.freeDistribution.emergency * freeFunds) / 100;
 		}
 
-		// Add the interest to the capitals for the next month
-		emergencyFund += emergencyGrowth;
-		investmentCapital += investmentGrowth;
+		currentEmergency = calculate(currentEmergency);
+
+		// annual increase in income/expenses
+		if (currentMonth === 12) {
+			currentIncome += (config.growth.income * currentIncome) / 100;
+			currentIncome = calculate(currentIncome);
+
+			currentExpenses += (config.growth.expenses * currentExpenses) / 100;
+			currentExpenses = calculate(currentExpenses);
+		}
+
+		// increment date for the next iteration
+		currentYear = currentMonth === 12 ? currentYear + 1 : currentYear;
+		currentMonth = currentMonth < 12 ? currentMonth + 1 : 1;
 	}
 
-	return monthlyData;
+	return items;
 };
 
-const generateDecadeData = (startData) => {
-	let decadeData = [];
-	let currentMonth = startData.startMonth;
-	let currentYear = startData.startYear;
-
-	for (let year = 0; year < startData.years; year++) {
-		const yearlyData = generateYearlyData(startData, currentMonth, currentYear);
-		decadeData = decadeData.concat(yearlyData);
-
-		currentMonth += 12;
-		currentYear = currentMonth > 12 ? currentYear + 1 : currentYear;
-		currentMonth = currentMonth > 12 ? currentMonth - 12 : currentMonth;
-
-		// Update start data for the next year
-		startData.income *= (1 + startData.growth.income / 100);
-		startData.expenses *= (1 + startData.growth.expenses / 100);
-	}
-
-	return decadeData;
-};
-
-const startData = {
-	startMonth: 1,
-	startYear: 2023,
+const plannerConfig = {
+	years: 10,
 	income: 3000,
 	expenses: 2200,
-	emergencyStart: 2900,
-	investmentStart: 1200,
+	month: 8,
+	year: 2023,
+	emergency: 2900,
+	investment: 1200,
+	emergencySize: 6,
+
 	freeDistribution: {
 		emergency: 50,
 		investment: 50,
 	},
+
 	growth: {
 		income: 20,
 		expenses: 10,
 		emergency: 3,
 		investment: 8,
 	},
-	emergencySize: 6,
-	years: 10,
 };
 
 const Planner = () => {
-	const items = generateDecadeData(startData);
+	const items = generateItems(plannerConfig);
 
 	return (
 		<TableContainer component={Paper} elevation={0}>
@@ -129,21 +133,21 @@ const Planner = () => {
 						</TableCell>
 
 						<TableCell
-							align="center"
+							align="right"
 							rowSpan={2}
 						>
 							Income
 						</TableCell>
 
 						<TableCell
-							align="center"
+							align="right"
 							rowSpan={2}
 						>
 							Expenses
 						</TableCell>
 
 						<TableCell
-							align="center"
+							align="right"
 							rowSpan={2}
 						>
 							Free Funds
@@ -166,7 +170,7 @@ const Planner = () => {
 						</TableCell>
 
 						<TableCell
-							align="center"
+							align="right"
 							rowSpan={2}
 						>
 							Total
@@ -174,30 +178,51 @@ const Planner = () => {
 					</TableRow>
 
 					<TableRow>
-						<TableCell sx={{ fontWeight: 400 }} align="center">current</TableCell>
-						<TableCell sx={{ fontWeight: 400 }} align="center">%/mo.</TableCell>
-						<TableCell sx={{ fontWeight: 400 }} align="center">current</TableCell>
-						<TableCell sx={{ fontWeight: 400 }} align="center">%/mo.</TableCell>
+						<TableCell sx={{ fontWeight: 400 }} align="right">current</TableCell>
+						<TableCell sx={{ fontWeight: 400 }} align="right">%/mo.</TableCell>
+						<TableCell sx={{ fontWeight: 400 }} align="right">current</TableCell>
+						<TableCell sx={{ fontWeight: 400 }} align="right">%/mo.</TableCell>
 					</TableRow>
 				</TableHead>
 
 				<TableBody>
-					{items.map((row) => (
-						<TableRow
-							key={row.date}
-							sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-						>
-							<TableCell>{row.date}</TableCell>
-							<TableCell align="right">{row.income}</TableCell>
-							<TableCell align="right">{row.expenses}</TableCell>
-							<TableCell align="right">{row.freeFunds}</TableCell>
-							<TableCell align="right">{row.emergencyFund.current}</TableCell>
-							<TableCell align="right">{row.emergencyFund.growth}</TableCell>
-							<TableCell align="right">{row.investmentCapital.current}</TableCell>
-							<TableCell align="right">{row.investmentCapital.growth}</TableCell>
-							<TableCell align="right">{row.total}</TableCell>
-						</TableRow>
-					))}
+					{items.map((row) => {
+						const formattedData = {
+							date: formatDate(row.month, row.year),
+							income: formatMoney(row.income),
+							expenses: formatMoney(row.expenses),
+							freeFunds: formatMoney(row.freeFunds),
+
+							emergency: {
+								current: formatMoney(row.emergency.current),
+								growth: formatMoney(row.emergency.growth),
+							},
+
+							investment: {
+								current: formatMoney(row.investment.current),
+								growth: formatMoney(row.investment.growth),
+							},
+
+							total: formatMoney(row.total),
+						};
+
+						return (
+							<TableRow
+								key={formattedData.date}
+								sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+							>
+								<TableCell align="center">{formattedData.date}</TableCell>
+								<TableCell align="right">{formattedData.income}</TableCell>
+								<TableCell align="right">{formattedData.expenses}</TableCell>
+								<TableCell align="right">{formattedData.freeFunds}</TableCell>
+								<TableCell align="right">{formattedData.emergency.current}</TableCell>
+								<TableCell align="right">{formattedData.emergency.growth}</TableCell>
+								<TableCell align="right">{formattedData.investment.current}</TableCell>
+								<TableCell align="right">{formattedData.investment.growth}</TableCell>
+								<TableCell align="right">{formattedData.total}</TableCell>
+							</TableRow>
+						);
+					})}
 				</TableBody>
 			</Table>
 		</TableContainer>
