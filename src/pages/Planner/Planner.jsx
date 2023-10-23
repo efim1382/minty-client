@@ -7,6 +7,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
+const MONTHS_IN_YEAR = 12;
+
 const formatMoney = (amount) => {
 	return new Intl.NumberFormat("en-US", {
 		style: "currency",
@@ -22,73 +24,65 @@ const calculate = (amount) => parseFloat(amount.toFixed(2));
 
 const generateItems = (config) => {
 	const items = [];
+	let { month, year, income, expenses, emergency, investment } = config;
 
-	let currentMonth = config.month;
-	let currentYear = config.year;
+	for (let monthIteration = 0; monthIteration < (MONTHS_IN_YEAR * config.years); monthIteration++) {
+		const freeFunds = calculate(income - expenses);
 
-	let currentIncome = config.income;
-	let currentExpenses = config.expenses;
+		const emergencyMonthlyIncome = calculate(((config.growth.emergency * emergency) / 100) / MONTHS_IN_YEAR);
+		const investmentMonthlyIncome = calculate(((config.growth.investment * investment) / 100) / MONTHS_IN_YEAR);
 
-	let currentEmergency = config.emergency;
-	let currentInvestment = config.investment;
-
-	for (let monthIteration = 0; monthIteration < (12 * config.years); monthIteration++) {
-		const freeFunds = calculate(currentIncome - currentExpenses);
-		const emergencyMonthlyIncome = calculate(((config.growth.emergency * currentEmergency) / 100) / 12);
-		const investmentMonthlyIncome = calculate(((config.growth.investment * currentInvestment) / 100) / 12);
-		const total = calculate(currentEmergency + currentInvestment);
-
+		// Calculate and store values for the current month
 		items.push({
-			month: currentMonth,
-			year: currentYear,
-			income: currentIncome,
-			expenses: currentExpenses,
-			freeFunds: freeFunds,
+			month,
+			year,
+			income,
+			expenses,
+			freeFunds,
 
 			emergency: {
-				current: currentEmergency,
+				current: emergency,
 				growth: emergencyMonthlyIncome,
 			},
 
 			investment: {
-				current: currentInvestment,
+				current: investment,
 				growth: investmentMonthlyIncome,
 			},
 
-			total,
+			total: calculate(emergency + investment),
 		});
 
-		// annual increase in investment
-		currentInvestment += investmentMonthlyIncome;
+		// Update values for the next month
+		investment += investmentMonthlyIncome;
 
-		const investmentPercent = currentExpenses * config.emergencySize
+		const investmentPercent = emergency < expenses * config.emergencySize
 			? config.freeDistribution.investment
 			: 100;
 
-		currentInvestment += (investmentPercent * freeFunds) / 100;
-		currentInvestment = calculate(currentInvestment);
+		investment += (investmentPercent * freeFunds) / 100;
+		investment = calculate(investment);
 
-		// annual increase in emergency fund
-		currentEmergency += emergencyMonthlyIncome;
+		emergency += emergencyMonthlyIncome;
 
-		if (currentEmergency < currentExpenses * config.emergencySize) {
-			currentEmergency += (config.freeDistribution.emergency * freeFunds) / 100;
+		if (emergency < expenses * config.emergencySize) {
+			emergency += (config.freeDistribution.emergency * freeFunds) / 100;
 		}
 
-		currentEmergency = calculate(currentEmergency);
+		emergency = calculate(emergency);
 
-		// annual increase in income/expenses
-		if (currentMonth === 12) {
-			currentIncome += (config.growth.income * currentIncome) / 100;
-			currentIncome = calculate(currentIncome);
-
-			currentExpenses += (config.growth.expenses * currentExpenses) / 100;
-			currentExpenses = calculate(currentExpenses);
+		if (month === MONTHS_IN_YEAR) {
+			income = calculate(income + (config.growth.income * income) / 100);
+			expenses = calculate(expenses + (config.growth.expenses * expenses) / 100);
 		}
 
-		// increment date for the next iteration
-		currentYear = currentMonth === 12 ? currentYear + 1 : currentYear;
-		currentMonth = currentMonth < 12 ? currentMonth + 1 : 1;
+		if (month === MONTHS_IN_YEAR) {
+			year += 1;
+		}
+
+		month = month === MONTHS_IN_YEAR
+			? 1
+			: month + 1;
 	}
 
 	return items;
