@@ -1,19 +1,29 @@
 import React from "react";
+import { Formik, Form } from "formik";
+import { login } from "services/api/auth";
+import TextField from "components/Form/TextField";
+import PasswordField from "components/Form/PasswordField";
 import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
 import { NavLink } from "react-router-dom";
 import Box from "@mui/material/Box";
-import InputAdornment from "@mui/material/InputAdornment";
 import Grid from "@mui/material/Grid";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 
 const Login = () => {
+	const onSubmit = (values) => {
+		return login(values)
+			.then((data) => {
+				console.log(data);
+			})
+
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
 	return (
 		<>
 			<Typography
@@ -43,87 +53,81 @@ const Login = () => {
 				Enter your credentials to continue
 			</Typography>
 
-			<Box component="form" mt={3}>
-				<TextField
-					fullWidth
-					name="email"
-					label="Email"
-				/>
+			<Formik initialValues={{}} onSubmit={onSubmit}>
+				{({ isSubmitting }) => (
+					<Box
+						component={Form}
+						mt={3}
+					>
+						{console.log("isSubmitting", isSubmitting)}
 
-				<TextField
-					fullWidth
-					type="password"
-					name="password"
-					label="Password"
-					sx={{ mt: 2 }}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<IconButton
-									aria-label="toggle password visibility"
-									edge="end"
-									size="large"
-									onClick={() => {}}
-									onMouseDown={() => {}}
-								>
-									{true ? <VisibilityIcon /> : <VisibilityOffIcon />}
-								</IconButton>
-							</InputAdornment>
-						),
-					}}
-				/>
-
-				<Grid
-					container
-					alignItems="center"
-					justifyContent="space-between"
-					mt={1}
-				>
-					<Grid item>
-						<FormControlLabel
-							control={(
-								<Checkbox
-									color="secondary"
-									sx={{
-										"& .MuiSvgIcon-root": {
-											fontSize: 24,
-										},
-									}}
-								/>
-							)}
-							label={(
-								<Typography variant="body1">Keep me logged in</Typography>
-							)}
+						<TextField
+							fullWidth
+							type="email"
+							name="email"
+							label="Email"
 						/>
-					</Grid>
 
-					<Grid item>
-						<Typography
-							variant="subtitle1"
-							color="secondary"
-							component={NavLink}
-							to="/auth/forgot-password/"
-							sx={{
-								fontWeight: 500,
-								textDecoration: "none",
-							}}
+						<PasswordField
+							fullWidth
+							name="password"
+							label="Password"
+							sx={{ mt: 2 }}
+						/>
+
+						<Grid
+							container
+							alignItems="center"
+							justifyContent="space-between"
+							mt={1}
 						>
-							Forgot Password?
-						</Typography>
-					</Grid>
-				</Grid>
+							<Grid item>
+								<FormControlLabel
+									control={(
+										<Checkbox
+											color="secondary"
+											sx={{
+												"& .MuiSvgIcon-root": {
+													fontSize: 24,
+												},
+											}}
+										/>
+									)}
+									label={(
+										<Typography variant="body1">Keep me logged in</Typography>
+									)}
+								/>
+							</Grid>
 
-				<Button
-					fullWidth
-					type="submit"
-					variant="contained"
-					color="secondary"
-					size="large"
-					sx={{ mt: 2 }}
-				>
-					Sign In
-				</Button>
-			</Box>
+							<Grid item>
+								<Typography
+									variant="subtitle1"
+									color="secondary"
+									component={NavLink}
+									to="/auth/forgot-password/"
+									sx={{
+										fontWeight: 500,
+										textDecoration: "none",
+									}}
+								>
+									Forgot Password?
+								</Typography>
+							</Grid>
+						</Grid>
+
+						<Button
+							fullWidth
+							type="submit"
+							variant="contained"
+							color="secondary"
+							size="large"
+							sx={{ mt: 2 }}
+						>
+							Sign In
+						</Button>
+					</Box>
+				)}
+			</Formik>
 
 			<Divider
 				sx={{

@@ -23,6 +23,7 @@ module.exports = {
 			"compositions": `${__dirname}/src/compositions`,
 			"pages": `${__dirname}/src/pages`,
 			"hooks": `${__dirname}/src/hooks`,
+			"services": `${__dirname}/src/services`,
 			"helpers": `${__dirname}/src/helpers`,
 			"styles": `${__dirname}/src/styles`,
 		},
