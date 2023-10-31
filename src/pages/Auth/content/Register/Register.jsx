@@ -1,22 +1,32 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { login } from "services/api/auth";
+import Typography from "@mui/material/Typography";
 import TextField from "components/Form/TextField";
 import PasswordField from "components/Form/PasswordField";
-import Typography from "@mui/material/Typography";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
+import { useSnackbar } from "notistack";
+import { register } from "pages/Auth/api";
+import useAuth from "pages/Auth/store/useAuth";
+import CircularProgress from "@mui/material/CircularProgress";
+import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
 
-const Login = () => {
+const Register = () => {
+	const { login } = useAuth();
+	const navigate = useNavigate();
+	const { enqueueSnackbar } = useSnackbar();
+
 	const onSubmit = (values) => {
-		return login(values)
-			.then((data) => {
-				console.log(data);
+		return register(values)
+			.then(() => login(values))
+
+			.then(() => {
+				enqueueSnackbar("Registration successful! Welcome aboard!", { variant: "success" });
+				navigate("/");
 			})
 
 			.catch((error) => {
@@ -41,7 +51,7 @@ const Login = () => {
 				align="center"
 				mt={4}
 			>
-				Hi, Welcome Back
+				Create Your Account
 			</Typography>
 
 			<Typography
@@ -50,17 +60,12 @@ const Login = () => {
 				component="p"
 				mt={1}
 			>
-				Enter your credentials to continue
+				Set up your account and dive in
 			</Typography>
 
 			<Formik initialValues={{}} onSubmit={onSubmit}>
 				{({ isSubmitting }) => (
-					<Box
-						component={Form}
-						mt={3}
-					>
-						{console.log("isSubmitting", isSubmitting)}
-
+					<Box component={Form} mt={3}>
 						<TextField
 							fullWidth
 							type="email"
@@ -75,45 +80,35 @@ const Login = () => {
 							sx={{ mt: 2 }}
 						/>
 
-						<Grid
-							container
-							alignItems="center"
-							justifyContent="space-between"
-							mt={1}
-						>
-							<Grid item>
-								<FormControlLabel
-									control={(
-										<Checkbox
-											color="secondary"
-											sx={{
-												"& .MuiSvgIcon-root": {
-													fontSize: 24,
-												},
-											}}
-										/>
-									)}
-									label={(
-										<Typography variant="body1">Keep me logged in</Typography>
-									)}
-								/>
-							</Grid>
-
-							<Grid item>
-								<Typography
-									variant="subtitle1"
+						<FormControlLabel
+							control={(
+								<Checkbox
 									color="secondary"
-									component={NavLink}
-									to="/auth/forgot-password/"
 									sx={{
-										fontWeight: 500,
-										textDecoration: "none",
+										"& .MuiSvgIcon-root": {
+											fontSize: 24,
+										},
 									}}
-								>
-									Forgot Password?
+								/>
+							)}
+							label={(
+								<Typography variant="subtitle1">
+									Agree with &nbsp;
+
+									<Typography
+										variant="subtitle1"
+										component="a"
+										href="/terms"
+										target="_blank"
+									>
+										Terms & Condition.
+									</Typography>
 								</Typography>
-							</Grid>
-						</Grid>
+							)}
+							sx={{
+								mt: 1,
+							}}
+						/>
 
 						<Button
 							fullWidth
@@ -122,8 +117,14 @@ const Login = () => {
 							color="secondary"
 							size="large"
 							sx={{ mt: 2 }}
+							disabled={isSubmitting}
+							startIcon={(
+								isSubmitting
+									? <CircularProgress size={20} color="inherit" />
+									: <HowToRegOutlinedIcon />
+							)}
 						>
-							Sign In
+							Sign Up
 						</Button>
 					</Box>
 				)}
@@ -140,14 +141,14 @@ const Login = () => {
 				<Typography
 					variant="subtitle1"
 					component={NavLink}
-					to="/auth/register/"
+					to="/auth/login/"
 					sx={{ textDecoration: "none" }}
 				>
-					Don't have an account?
+					Already have an account?
 				</Typography>
 			</Box>
 		</>
 	);
 };
 
-export default Login;
+export default Register;

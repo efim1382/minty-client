@@ -10,6 +10,7 @@ import Button from "@mui/material/Button";
 import MuiListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import useAuth from "pages/Auth/store/useAuth";
 import Divider from "@mui/material/Divider";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
@@ -28,6 +29,8 @@ const ListItemButton = styled(MuiListItemButton)(({ theme }) => ({
 }));
 
 const ProfilePopup = ({ isShown, id, anchor, onClose }) => {
+	const { logout } = useAuth();
+
 	return (
 		<Popper
 			transition
@@ -114,7 +117,7 @@ const ProfilePopup = ({ isShown, id, anchor, onClose }) => {
 									<ListItemText>Settings</ListItemText>
 								</ListItemButton>
 
-								<ListItemButton sx={{ mt: "4px" }}>
+								<ListItemButton sx={{ mt: "4px" }} onClick={logout}>
 									<ListItemIcon>
 										<LogoutOutlinedIcon />
 									</ListItemIcon>

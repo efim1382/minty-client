@@ -31,3 +31,9 @@ export const register = (data) => {
 		},
 	});
 };
+
+export const logout = () => {
+	return post({
+		url: "/auth/logout/",
+	});
+};

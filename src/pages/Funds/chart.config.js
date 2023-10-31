@@ -3,6 +3,10 @@ export default {
 		chart: {
 			id: "funds-type-chart",
 			type: "donut",
+
+			animations: {
+				enabled: false,
+			},
 		},
 
 		legend: {

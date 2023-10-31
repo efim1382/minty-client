@@ -7,14 +7,16 @@ import {
 	Navigate,
 } from "react-router-dom";
 
+import RequireAuth from "components/RequireAuth";
+
 import GlobalLayout from "components/Layout/GlobalLayout";
 import Layout from "components/Layout";
 import AuthLayout from "pages/Auth/components/Layout";
 
-import Login from "pages/Auth/Login";
-import Register from "pages/Auth/Register";
-import ForgotPassword from "pages/Auth/ForgotPassword";
-import ResetPassword from "pages/Auth/ResetPassword";
+import Login from "pages/Auth/content/Login";
+import Register from "pages/Auth/content/Register";
+import ForgotPassword from "pages/Auth/content/ForgotPassword";
+import ResetPassword from "pages/Auth/content/ResetPassword";
 
 import Dashboard from "pages/Dashboard";
 import Portfolios from "pages/Portfolios";
@@ -33,7 +35,14 @@ import Privacy from "pages/Privacy";
 
 const router = (
 	<Route path="/" element={<GlobalLayout />}>
-		<Route path="/" element={<Layout />}>
+		<Route
+			path="/"
+			element={(
+				<RequireAuth>
+					<Layout />
+				</RequireAuth>
+			)}
+		>
 			<Route index element={<Dashboard />} />
 			<Route path="/analytics/" element={<Analytics />} />
 			<Route path="/portfolios/" element={<Portfolios />} />
